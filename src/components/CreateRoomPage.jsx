@@ -18,12 +18,12 @@ const CreateRoomPage = () => {
     status: '',
   }
 
-  const {handleSubmit, reset, setValue, control} = useForm({defaultValues:defaultValues})
+  const {handleSubmit, control} = useForm({defaultValues:defaultValues})
 
   const submission = (data) => {
     const startDate = Dayjs(data.start_date["$d"]).format("YYYY-MM-DD")
     const endDate = Dayjs(data.end_date["$d"]).format("YYYY-MM-DD")
-    AxiosInstance.post(`project/`, {
+    AxiosInstance.post(`api/project/`, {
       name: data.name,
       status: data.status,
       comments: data.comments,
