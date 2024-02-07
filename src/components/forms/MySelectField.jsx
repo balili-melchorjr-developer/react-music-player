@@ -31,7 +31,7 @@ export default function MySelectField(props) {
                         labelId="demo-simple-select-filled-label"
                         id="demo-simple-select-filled"
                         
-                        onChange={handleChange}
+                        onChange={onChange}
                         value={value}
                         >
                         <MenuItem value="">

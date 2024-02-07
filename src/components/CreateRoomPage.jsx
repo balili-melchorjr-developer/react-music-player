@@ -5,9 +5,13 @@ import MyTextField from './forms/MyTextField'
 import MySelectField from './forms/MySelectField'
 import MyMultilineField from './forms/MyMultilineField'
 import { useForm } from 'react-hook-form'
+import AxiosInstance from './Axios'
+import Dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 
 const CreateRoomPage = () => {
 
+  const navigate = useNavigate()
   const defaultValues = {
     name: '',
     comments: '',
@@ -16,7 +20,20 @@ const CreateRoomPage = () => {
 
   const {handleSubmit, reset, setValue, control} = useForm({defaultValues:defaultValues})
 
-  const submission = (data) => console.log(data)
+  const submission = (data) => {
+    const startDate = Dayjs(data.start_date["$d"]).format("YYYY-MM-DD")
+    const endDate = Dayjs(data.end_date["$d"]).format("YYYY-MM-DD")
+    AxiosInstance.post(`project/`, {
+      name: data.name,
+      status: data.status,
+      comments: data.comments,
+      start_date: startDate,
+      end_date: endDate
+    })
+    .then((res) => {
+      navigate(`/`)
+    })
+  }
 
   return (
     <div>
