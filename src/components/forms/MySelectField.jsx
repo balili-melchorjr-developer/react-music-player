@@ -13,7 +13,7 @@ export default function MySelectField(props) {
     setAge(event.target.value);
   };
 
-  const { label, name, control, width } = props
+  const { label, name, control, width, options } = props
 
   return (
 
@@ -35,21 +35,21 @@ export default function MySelectField(props) {
                         onChange={onChange}
                         value={value} 
                         error={!!error}                 
-                        >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={"Open"}>Open</MenuItem>
-                        <MenuItem value={"In progess"}>In progress</MenuItem>
-                        <MenuItem value={"Completed"}>Completed</MenuItem>
+                        > 
+                        {
+                          options.map((option) => (
+                            <MenuItem value={option.id}>
+                              {option.name}
+                            </MenuItem>
+                          ))
+                        }
                         </Select>
 
                         <FormHelperText sx={{color:"#d32f2f"}}>{error?.message}</FormHelperText>
 
                         </FormControl>
                 )}            
-            />
-      
+            />    
 
   );
 }

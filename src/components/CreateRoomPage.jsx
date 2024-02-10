@@ -1,4 +1,4 @@
-import React from 'react'
+import {React, useEffect, useState} from 'react'
 import { Box, Typography, Button } from '@mui/material'
 import MyDatePickerField from './forms/MyDatePickerField'
 import MyTextField from './forms/MyTextField'
@@ -13,6 +13,29 @@ import * as yup from "yup"
 
 const CreateRoomPage = () => {
 
+  const [projectManager, setProjectManager] = useState()
+  const [loading, setLoading] = useState(true)
+
+  const hardcoded_options = [
+    {id: '', name: 'None'},
+    {id: 'Open', name: 'Open' },
+    {id: 'In progress', name: 'In progress' },
+    {id: 'Completed', name: 'Completed' },
+  ]
+
+  const getData = () => {
+    AxiosInstance.get(`api/project-manager/`)
+    .then((response) => {
+      setProjectManager(response.data)
+      console.log(response.data)
+      setLoading(false)
+    })
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])  
+
   const navigate = useNavigate()
   const defaultValues = {
     name: '',
@@ -22,6 +45,7 @@ const CreateRoomPage = () => {
 
   const schema = yup
   .object({
+    name: yup.string().required('Name is required field'),
     name: yup.string().required('Name is required field'),
     status: yup.string().required('Status is required field'),
     comments: yup.string(),
@@ -38,6 +62,7 @@ const CreateRoomPage = () => {
 
     AxiosInstance.post(`api/project/`, {
       name: data.name,
+      project_manager: data.project_manager,
       status: data.status,
       comments: data.comments,
       start_date: startDate,
@@ -50,6 +75,8 @@ const CreateRoomPage = () => {
 
   return (
     <div>
+
+      { loading ? <p>Loading data ...</p> :
       <form onSubmit={handleSubmit(submission)}>
       <Box sx={{display: 'flex', width: '100%', backgroundColor:'#00003f', marginBottom: '10px'}}>
         <Typography sx={{marginLeft: '20px', color: '#ffff'}}>
@@ -93,17 +120,29 @@ const CreateRoomPage = () => {
               name='status'
               control={control} 
               width={'30%'}
+              options={hardcoded_options}
             />
 
-            <Box sx={{width:'30%'}}>
-                <Button variant="contained" type="submit" sx={{width: '100%'}}>
-                  Submit
-                </Button>
-            </Box>
+            
+              <MySelectField
+                label='Project Manager'
+                name='project_manager'
+                control={control} 
+                width={'30%'}
+                options={projectManager}
+              />
+       
 
         </Box>
+        <Box sx={{display: 'flex', justifyContent: 'start', marginTop: '40px'}}>
+          <Button variant="contained" type="submit" sx={{width: '30%'}}>
+            Submit
+          </Button>
+        </Box>
       </Box>
+
       </form>
+      }
     </div>
   )
 }
