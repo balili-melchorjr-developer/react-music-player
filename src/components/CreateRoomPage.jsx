@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form'
 import AxiosInstance from './Axios'
 import Dayjs from 'dayjs'
 import { useNavigate } from 'react-router-dom'
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
 
 const CreateRoomPage = () => {
 
@@ -18,11 +20,22 @@ const CreateRoomPage = () => {
     status: '',
   }
 
-  const {handleSubmit, control} = useForm({defaultValues:defaultValues})
+  const schema = yup
+  .object({
+    name: yup.string().required('Name is required field'),
+    status: yup.string().required('Status is required field'),
+    comments: yup.string(),
+    start_date: yup.date().required('Start Date is required field'),
+    end_date: yup.date().required('End Date is required field').min(yup.ref('start_date'), 'The end date cannot be before the start date'),
+  })
+  .required()
+
+  const {handleSubmit, control} = useForm({defaultValues:defaultValues, resolver: yupResolver(schema)})
 
   const submission = (data) => {
     const startDate = Dayjs(data.start_date["$d"]).format("YYYY-MM-DD")
     const endDate = Dayjs(data.end_date["$d"]).format("YYYY-MM-DD")
+
     AxiosInstance.post(`api/project/`, {
       name: data.name,
       status: data.status,
