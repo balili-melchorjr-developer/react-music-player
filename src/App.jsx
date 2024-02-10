@@ -11,6 +11,7 @@ function App() {
         <Router>
           <Navbar routes={routes} />
           <AppRoutes />
+                    
         </Router>
       </div>   
   )
