@@ -5,6 +5,7 @@ import HomePage from './components/HomePage'
 import JoinRoomPage from './components/JoinRoomPage'
 import CreateRoomPage from './components/CreateRoomPage'
 import EditPage from './components/EditPage'
+import DeletePage from './components/DeletePage'
 import HomeIcon from '@mui/icons-material/Home'
 import AddIcon from '@mui/icons-material/Add'
 import JoinFullIcon from '@mui/icons-material/JoinFull'
@@ -23,6 +24,7 @@ const AppRoutes = () => {
             <Route key={route.path} path={route.path} element={route.element} />
             ))}
             <Route path="/edit/:id" element={<EditPage />} />
+            <Route path="/delete/:id" element={<DeletePage />} />
         </Routes>
     )
 }
